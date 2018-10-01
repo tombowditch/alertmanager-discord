@@ -46,7 +46,10 @@ type discordOut struct {
 func main() {
 	whURL := flag.String("webhook.url", "https://blah", "")
 	flag.Parse()
-	http.ListenAndServe("localhost:9094", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	http.ListenAndServe("localhost:9094", http.HandlerFunc(handler))
+}
+
+func handler(w http.ResponseWriter, r *http.Request) {
 		b, err := ioutil.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
@@ -79,5 +82,4 @@ func main() {
 
 		DOD, _ := json.Marshal(DO)
 		http.Post(*whURL, "application/json", bytes.NewReader(DOD))
-	}))
-}
+	}
